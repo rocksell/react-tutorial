@@ -28,12 +28,23 @@ var TodoList = React.createClass({
 });
 
 var Todo = React.createClass({
+  getInitialState : function() {
+    return {
+      checked: false
+    };
+  },
+  handleChange : function() {
+      this.setState({
+        checked: !(this.state.checked)
+      })
+  },
   propTypes: {
         title: React.PropTypes.string.isRequired
   },
   render: function() {
     return (
       <tr>
+        <td style={{border: "1px solid black"}}><input type="checkbox" checked={this.state.checked} onChange={this.handleChange} /></td>
         <td style={{border: "1px solid black"}}>{this.props.title}</td>
         <td style={{border: "1px solid black"}}>{this.props.children}</td>
       </tr>
