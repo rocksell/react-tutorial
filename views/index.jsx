@@ -5,7 +5,7 @@ var TodoBox = React.createClass({
     return (
       <div className="todoBox">
         <h1>Todos</h1>
-        <TodoList></TodoList>
+        <TodoList data = {this.props.data}></TodoList>
         <TodoForm></TodoForm>
       </div>
     );
@@ -14,12 +14,14 @@ var TodoBox = React.createClass({
 
 var TodoList = React.createClass({
   render: function() {
+    var todo = this.props.data.map(function(obj) {
+        return <Todo title={obj.title} key={obj.title}>{obj.detail}</Todo>
+    });
     return (
       <div className = "todoList">
         <table style={style.tableContentBold}>
           <tbody>
-            <Todo title="Shopping">Milk</Todo>
-            <Todo title="Hair cut">13:00</Todo>
+            {todo}
           </tbody>
         </table>
       </div>
