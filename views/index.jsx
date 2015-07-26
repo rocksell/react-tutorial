@@ -12,21 +12,52 @@ var TodoBox = React.createClass({
   }
 });
 
-var TodoList = React.createClass({
-  render: function() {
-    var todo = this.props.data.map(function(obj) {
-        return <Todo title={obj.title} key={obj.title}>{obj.detail}</Todo>
+
+var TodoList = React.createClass({ 
+  getInitialState: function() { 
+    return { 
+      data: this.props.data, 
+      titleValue: "", 
+      detailValue: "" 
+    }; 
+  }, 
+  changeTitle: function(e) { 
+    this.setState({
+      titleValue: e.target.value
     });
-    return (
-      <div className = "todoList">
-        <table style={style.tableContentBold}>
-          <tbody>
-            {todo}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+  }, 
+  changeDetail: function(e) { 
+    this.setState({
+      detailValue: e.target.value
+    }); 
+  }, 
+  addTodo: function() {
+    var newToDoData = this.state.data;
+    newToDoData.push({ title:titleValue, detail: detailValue}); 
+    this.setState({
+      data: newToDoData
+    });
+    this.setState({ titleValue:"", detailValue:""});
+  }, 
+  render: function() { 
+    var todo = this.state.data.map(function(obj) { 
+      return <Todo title={obj.title} key={obj.title}>{obj.detail}</Todo>; 
+    }); 
+    return ( 
+      <div className = "todoList"> 
+        <div> 
+          Title:<input type="text" value={this.state.titleValue} onChange={this.changeTitle} /> 
+          Detail:<input type="text" value={this.state.detailValue} onChange={this.changeDetail} /> 
+          <button onClick={this.addTodo}>Add</button> 
+        </div> 
+        <table style={{border: "2px solid black"}}> 
+          <tbody> 
+            {todo} 
+          </tbody> 
+        </table> 
+      </div> 
+    ); 
+  } 
 });
 
 var Todo = React.createClass({
