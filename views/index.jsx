@@ -32,17 +32,28 @@ var TodoList = React.createClass({
     }); 
   }, 
   addTodo: function() {
-    var newToDoData = this.state.data;
-    newToDoData.push({ title:titleValue, detail: detailValue}); 
+    var newData = this.state.data;
+    newData.push({ title:titleValue, detail: detailValue}); 
     this.setState({
-      data: newToDoData
+      data: newData
     });
-    this.setState({ titleValue:"", detailValue:""});
+    this.setState({
+      titleValue:"",
+      detailValue:""
+    });
+  },
+  onDelete: function(title) {
+    var newData = this.state.data.filter(function(toDo){
+      return toDo.title !== title;
+    });
+    this.setState({
+      data: newData
+    });
   }, 
   render: function() { 
     var todo = this.state.data.map(function(obj) { 
       return <Todo title={obj.title} key={obj.title}>{obj.detail}</Todo>; 
-    }); 
+    }.bind(this)); 
     return ( 
       <div className = "todoList"> 
         <div> 
@@ -68,17 +79,22 @@ var Todo = React.createClass({
     };
   },
   handleChange : function(e) {
-      this.setState({
-        checked: e.target.checked,
-        itemToDoStyle: e.target.checked ? style.checkedTodo : style.notCheckedTodo
-      });
+    this.setState({
+      checked: e.target.checked,
+      itemToDoStyle: e.target.checked ? style.checkedTodo : style.notCheckedTodo
+    });
+  },
+  _onDelete: function() {
+    this.props.onDelete(this.props.tittle);
   },
   propTypes: {
-        title: React.PropTypes.string.isRequired
+    title: React.PropTypes.string.isRequired,
+    onDelete: React.PropTypes.string.isRequired
   },
   render: function() {
     return (
       <tr style= {this.state.itemToDoStyle}>
+        <td style={style.tableContent}><button onClick="this._onDelete">X</button></td>
         <td style={style.tableContent}><input type="checkbox" checked={this.state.checked} onChange={this.handleChange} /></td>
         <td style={style.tableContent}>{this.props.title}</td>
         <td style={style.tableContent}>{this.props.children}</td>
